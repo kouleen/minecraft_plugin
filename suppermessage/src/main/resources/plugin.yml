@@ -1,0 +1,5 @@
+name: SupperMessage
+version: '${project.version}'
+main: com.kouleen.suppermessage.SupperMessage
+authors: [ kouleen ]
+description: supper message

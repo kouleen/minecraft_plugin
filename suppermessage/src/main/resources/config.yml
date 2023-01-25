@@ -1,0 +1,15 @@
+#     *********************************************
+#     *           中文名：SuperMessage            *
+#     *           作  者：Kouleen                 *
+#     *           版  本：1.0.0                   *
+#     *********************************************
+global:
+  connection:
+    host: ''
+    port: ''
+    username: ''
+    password: ''
+    virtualhost: ''
+    queue-name: ''
+
+

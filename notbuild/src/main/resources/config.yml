@@ -1,0 +1,18 @@
+not-build-world:
+  - world
+  - world_nether
+  - world_the_end
+break:
+  switch: true
+  message: "You don't have permission to break."
+place:
+  switch: true
+  message: "You don't have permission to place."
+leaves-decay-world:
+  - world
+  - world_nether
+  - world_the_end
+block-fade-world:
+  - world
+  - world_nether
+  - world_the_end

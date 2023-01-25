@@ -1,0 +1,13 @@
+name: ReSpawn
+version: '${project.version}'
+main: com.kouleen.respawn.ReSpawn
+authors: [ kouleen ]
+description: death and rebirth
+softdepend:
+  - Vault
+commands:
+  respawn:
+    description: 'Death drops items randomly'
+    usage: 'help: /<command> help'
+    permission: op
+    permission-message: 'You do not have permission to use this command!'

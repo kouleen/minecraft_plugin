@@ -1,0 +1,5 @@
+name: PluginManage
+version: '${project.version}'
+main: com.kouleen.pluginmanage.PluginManage
+authors: [ kouleen ]
+description: plugin manage

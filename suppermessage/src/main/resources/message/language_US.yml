@@ -1,0 +1,20 @@
+#     *************************************************************************
+#     *           name:SupperMessage                                          *
+#     *           authors:kouleen                                             *
+#     *           version:1.0.0                                               *
+#     *           link:https://www.kouleen.cn                                 *
+#     *************************************************************************
+message:
+  help:
+    off: '§7§l/message <off>  §6no harassment, shut down the outside service message'
+    on: '§7§l/message <on>  §6I want to flirt, open up the message'
+    msg: '§7§l/message <Send a chat message>  §6There are a lot of words'
+  off:
+    success: '[message] §2§lThe Settings are successful. External service messages are closed'
+    repeat: '[message] §4§lExternal service messages are disabled. Do not repeat this operation'
+  on:
+    success: '[message] §e§lThe Settings are successful. External service messages are enabled'
+    repeat: '[message] §4§lExternal service messages have been enabled. Do not repeat this operation'
+  global:
+    error-player: '[message] §4§lYour current external message is not enabled'
+    error-console: '[message] §4§lThis command does not allow the console to be enabled'

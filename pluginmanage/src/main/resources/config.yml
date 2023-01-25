@@ -1,0 +1,17 @@
+#     *************************************************************************
+#     *           name:PluginManger                                           *
+#     *           authors:kouleen                                             *
+#     *           version:1.0.0                                               *
+#     *           link:https://www.kouleen.cn                                 *
+#     *************************************************************************
+global:
+  # checking for updates
+  check-update: true
+  # auto update
+  auto-update: true
+plugin:
+  synchronize:
+    # login username
+    username: 'admin123'
+    # password of the logged-in user
+    password: 'admin123'

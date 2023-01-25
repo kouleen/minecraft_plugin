@@ -1,0 +1,28 @@
+name: NotBuild
+version: '${project.version}'
+main: com.kouleen.notbuild.NotBuild
+authors: [ kouleen ]
+description: build Management
+commands:
+  notbuild:
+    description: 'Admin commands'
+    usage:  |
+      /notbuild help
+permissions:
+  notbuild.*:
+    children:
+      notbuild.build:
+        description: '禁止建造'
+        default: false
+      notbuild.break:
+        description: '禁止摧毁'
+        default: false
+      notbuild.place:
+        description: '禁止场所'
+        default: false
+  build.*:
+    description: '构建'
+    default: false
+  place.*:
+    description: '场所'
+    default: false
