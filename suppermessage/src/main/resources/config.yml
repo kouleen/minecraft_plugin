@@ -4,6 +4,7 @@
 #     *           版  本：1.0.0                   *
 #     *********************************************
 global:
+  lang: language_US.yml
   connection:
     host: ''
     port: ''

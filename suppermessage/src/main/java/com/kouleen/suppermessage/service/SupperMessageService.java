@@ -17,6 +17,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -40,71 +41,14 @@ public interface SupperMessageService {
     /**
      * 生产消息
      */
-    default boolean producer(JavaPluginBean javaPluginBean, String[] args, Player player, CommandSender commandSender){
-        if (args.length >= 1) {
-            StringBuilder builder = new StringBuilder();
-            List<String> strList = Arrays.asList(args);
-            strList.forEach(str -> builder.append(str).append(" "));
-            FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
-            RabbitMQDTO rabbitMQDTO = this.injectionRabbitMQ(fileConfiguration);
-            GlobalSingleton.getThreadPoolExecutor().execute(() ->{
-                String message = "[" + this.getTime() + "] " + "[" + player.getName() + "] " + builder;
-                try {
-                    Channel channel = this.getChannel(rabbitMQDTO);
-                    channel.queueDeclare(rabbitMQDTO.getQueueName(), false, false, true, null);
-                    channel.basicPublish("", rabbitMQDTO.getQueueName(), null, message.getBytes(StandardCharsets.UTF_8));
-                } catch (Exception e) {
-                    commandSender.sendMessage("§4§l网络异常,发送失败");
-                }
-            });
-        }
-        return true;
-    }
+    boolean producer(JavaPluginBean javaPluginBean, String[] args, Player player, CommandSender commandSender);
 
     /**
      * 消费消息
      */
-    default void consumer(JavaPluginBean javaPluginBean){
-        FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
-        RabbitMQDTO rabbitMQDTO = this.injectionRabbitMQ(fileConfiguration);
-        GlobalSingleton.getThreadPoolExecutor().execute(() -> {
-            Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-            Map<UUID, String> players = GlobalSingleton.getPlayers();
-            ConsoleCommandSender consoleCommandSender = Bukkit.getConsoleSender();
-            try {
-                Channel channel = this.getChannel(rabbitMQDTO);
-                //声明队列
-                channel.queueDeclare(rabbitMQDTO.getQueueName(), false, false, true, null);
-                channel.basicQos(1);
-                //定义消费者
-                Consumer consumer = new DefaultConsumer(channel) {
-                    @Override
-                    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                        String message = new String(body, StandardCharsets.UTF_8);
-                        try {
-                            if (onlinePlayers.size() == 0) {
-                                consoleCommandSender.sendMessage(message);
-                            }
-                            onlinePlayers.forEach(player -> {
-                                if (players.size() > 0 && players.containsKey(player.getUniqueId())) {
-                                    consoleCommandSender.sendMessage(message);
-                                } else {
-                                    player.sendMessage(message);
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            channel.basicAck(envelope.getDeliveryTag(), false);
-                        }
-                    }
-                };
-                channel.basicConsume(rabbitMQDTO.getQueueName(), false, consumer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+    void consumer(JavaPluginBean javaPluginBean);
+
+    boolean closeChannel();
 
     default RabbitMQDTO injectionRabbitMQ(FileConfiguration fileConfiguration){
         RabbitMQDTO rabbitMQDTO = new RabbitMQDTO();
@@ -164,11 +108,9 @@ public interface SupperMessageService {
     default boolean registerEvents(JavaPluginBean javaPluginBean){
         SupperMessage supperMessage = javaPluginBean.getSupperMessage();
         Logger logger = supperMessage.getLogger();
-        logger.info("listening event registration ------------------> start");
         ListenerService listenerService = javaPluginBean.getListenerService();
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(listenerService,supperMessage);
-        logger.info("listening event registration ------------------> end");
         return true;
     }
 
@@ -178,16 +120,21 @@ public interface SupperMessageService {
     default boolean registerCommand(JavaPluginBean javaPluginBean){
         SupperMessage supperMessage = javaPluginBean.getSupperMessage();
         Logger logger = supperMessage.getLogger();
-        logger.info("registration command -----------------> start");
         PluginCommand pluginCommand = supperMessage.getCommand("message");
         if(pluginCommand != null){
             CommandService commandService = javaPluginBean.getCommandService();
             pluginCommand.setExecutor(commandService);
             TabExecutorService tabExecutorService = javaPluginBean.getTabExecutorService();
             pluginCommand.setTabCompleter(tabExecutorService);
-            logger.info("registration command success");
         }
-        logger.info("registration command -----------------> end");
+        logger.info("§c _____ ______   _______   ________   ________  ________  ________  _______      ");
+        logger.info("§c|\\   _ \\  _   \\|\\  ___ \\ |\\   ____\\ |\\   ____\\|\\   __  \\|\\   ____\\|\\  ___ \\     ");
+        logger.info("§c\\ \\  \\\\\\__\\ \\  \\ \\   __/|\\ \\  \\___|_\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\___|\\ \\   __/|    ");
+        logger.info("§c \\ \\  \\\\|__| \\  \\ \\  \\_|/_\\ \\_____  \\\\ \\_____  \\ \\   __  \\ \\  \\  __\\ \\  \\_|/__  ");
+        logger.info("§c  \\ \\  \\    \\ \\  \\ \\  \\_|\\ \\|____|\\  \\\\|____|\\  \\ \\  \\ \\  \\ \\  \\|\\  \\ \\  \\_|\\ \\ ");
+        logger.info("§c   \\ \\__\\    \\ \\__\\ \\_______\\____\\_\\  \\ ____\\_\\  \\ \\__\\ \\__\\ \\_______\\ \\_______\\");
+        logger.info("§c    \\|__|     \\|__|\\|_______|\\_________\\\\_________\\|__|\\|__|\\|_______|\\|_______|");
+        logger.info("§c                            \\|_________\\|_________|                             ");
         return true;
     }
 
@@ -196,11 +143,15 @@ public interface SupperMessageService {
      */
     default boolean saveConfigFile(JavaPluginBean javaPluginBean){
         SupperMessage supperMessage = javaPluginBean.getSupperMessage();
-        Logger logger = supperMessage.getLogger();
-        logger.warning("save the file and refresh it ------------------- start ");
+        File dataFolder = supperMessage.getDataFolder();
+        if(!new File(dataFolder,"message/language_US.yml").exists()){
+            supperMessage.saveResource("message/language_US.yml",false);
+        }
+        if(!new File(dataFolder,"message/language_ZH.yml").exists()){
+            supperMessage.saveResource("message/language_ZH.yml",false);
+        }
         supperMessage.saveDefaultConfig();
         supperMessage.reloadConfig();
-        logger.warning("save the file and refresh it ------------------- end ");
         return true;
     }
 }
