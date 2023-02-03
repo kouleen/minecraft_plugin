@@ -3,3 +3,8 @@ version: '${project.version}'
 main: com.kouleen.suppermessage.SupperMessage
 authors: [ kouleen ]
 description: supper message
+commands:
+  message:
+    description: 'Admin commands'
+    usage:  |
+      /message help

@@ -1,0 +1,5 @@
+name: FreeMenu
+version: '${project.version}'
+main: com.kouleen.freemenu.FreeMenu
+authors: [ kouleen ]
+description: free menu

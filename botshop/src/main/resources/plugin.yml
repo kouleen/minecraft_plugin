@@ -1,0 +1,11 @@
+name: BotShop
+version: '${project.version}'
+main: online.baikele.plugins.botshop.BotShop
+api-version: 1.19
+depend: []
+#  - InfiniteBot3
+#  - PlaceholderAPI
+commands:
+  botshop:
+    aliases:
+      - botshop

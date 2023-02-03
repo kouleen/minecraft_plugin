@@ -11,32 +11,30 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author zhangqing
  * @since 2023/1/25 20:16
  */
-public final class GlobalSingleton {
+public final class GlobalSingleton implements Singleton{
 
-    private static Map<UUID, String> players;
+    private static final class PlayersHolder {
+        static final Map<UUID, String> players = new HashMap<>();
+    }
 
-    private static ThreadPoolExecutor threadPoolExecutor;
+    public Map<UUID, String> getPlayer() {
+        return PlayersHolder.players;
+    }
 
     public static Map<UUID, String> getPlayers() {
-        if (players == null) {
-            synchronized (GlobalSingleton.class) {
-                if (players == null) {
-                    players = new HashMap<>();
-                }
-            }
-        }
-        return players;
+        return PlayersHolder.players;
+    }
+
+    private static final class ThreadPoolExecutorHolder {
+        static final ThreadPoolExecutor threadPoolExecutor = CommonExecutor.getCommonExecutor();
+    }
+
+    public ThreadPoolExecutor getThreadExecutor(){
+        return ThreadPoolExecutorHolder.threadPoolExecutor;
     }
 
     public static ThreadPoolExecutor getThreadPoolExecutor(){
-        if(threadPoolExecutor == null){
-            synchronized (GlobalSingleton.class){
-                if(threadPoolExecutor == null){
-                    threadPoolExecutor = CommonExecutor.getCommonExecutor();
-                }
-            }
-        }
-        return threadPoolExecutor;
+        return ThreadPoolExecutorHolder.threadPoolExecutor;
     }
 
 }

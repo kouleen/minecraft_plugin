@@ -2,8 +2,10 @@ package com.kouleen.suppermessage.command;
 
 import com.kouleen.suppermessage.domain.JavaPluginBean;
 import com.kouleen.suppermessage.singleton.GlobalSingleton;
+import com.kouleen.suppermessage.singleton.Singleton;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -17,14 +19,18 @@ public class CommandServiceImpl implements CommandService {
 
     private final JavaPluginBean javaPluginBean;
 
+    private final Singleton singleton;
+
     public CommandServiceImpl(JavaPluginBean javaPluginBean){
         this.javaPluginBean = javaPluginBean;
+        this.singleton = new GlobalSingleton();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Map<UUID, String> players = GlobalSingleton.getPlayers();
+        Map<UUID, String> players = singleton.getPlayer();
         if (args.length >= 1) {
+            FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
             if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
                 sender.sendMessage("§2§l====§8§l【§a§l super-message §8§l】§2§l====");
                 sender.sendMessage("§2§l====§8§l【§a§l QQ群：645375329 §8§l】§2§l====");
