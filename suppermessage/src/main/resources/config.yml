@@ -3,14 +3,24 @@
 #     *           作  者：Kouleen                 *
 #     *           版  本：1.0.0                   *
 #     *********************************************
+
+# global setting
 global:
+  # language
   lang: language_US.yml
+  # rabbit connection info see https://www.rabbitmq.com/
   connection:
+    # host
     host: ''
+    # port
     port: ''
+    # username
     username: ''
+    # password
     password: ''
+    # virtualhost
     virtualhost: ''
+    # queue-name
     queue-name: ''
 
 

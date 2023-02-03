@@ -33,7 +33,6 @@ public final class SupperMessage extends JavaPlugin {
         supperMessageService.consumer(javaPluginBean);
         supperMessageService.registerCommand(javaPluginBean);
         supperMessageService.registerEvents(javaPluginBean);
-
     }
 
     @Override

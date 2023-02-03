@@ -107,7 +107,6 @@ public interface SupperMessageService {
      */
     default boolean registerEvents(JavaPluginBean javaPluginBean){
         SupperMessage supperMessage = javaPluginBean.getSupperMessage();
-        Logger logger = supperMessage.getLogger();
         ListenerService listenerService = javaPluginBean.getListenerService();
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(listenerService,supperMessage);
