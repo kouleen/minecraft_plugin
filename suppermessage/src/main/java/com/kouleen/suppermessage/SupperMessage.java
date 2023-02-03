@@ -9,7 +9,6 @@ import com.kouleen.suppermessage.service.SupperMessageServiceImpl;
 import com.kouleen.suppermessage.singleton.GlobalSingleton;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public final class SupperMessage extends JavaPlugin {

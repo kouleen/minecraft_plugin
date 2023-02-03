@@ -2,6 +2,7 @@ package com.kouleen.suppermessage.command;
 
 import com.kouleen.suppermessage.constant.GlobalPluginEnum;
 import com.kouleen.suppermessage.domain.JavaPluginBean;
+import com.kouleen.suppermessage.service.SupperMessageService;
 import com.kouleen.suppermessage.singleton.GlobalSingleton;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,8 @@ public class CommandServiceImpl implements CommandService {
             }else {
                 yamlConfiguration = YamlConfiguration.loadConfiguration(new File(javaPluginBean.getSupperMessage().getDataFolder(), "message/language_US.yml"));
             }
-            if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
+            SupperMessageService supperMessageService = javaPluginBean.getSupperMessageService();
+            if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.HELP.getCode())) {
                 sender.sendMessage("§2§l====§8§l【§a§l super-message §8§l】§2§l====");
                 sender.sendMessage("§2§l====§8§l【§a§l QQ群：645375329 §8§l】§2§l====");
                 String offMessage = yamlConfiguration.getString("message.help.off");
@@ -85,7 +87,7 @@ public class CommandServiceImpl implements CommandService {
                     sender.sendMessage("[message] §4§l你当前的外部信息没开启");
                     return true;
                 }
-                return javaPluginBean.getSupperMessageService().producer(javaPluginBean,args, player, sender);
+                return supperMessageService.producer(javaPluginBean,args, player, sender);
             }else {
                 sender.sendMessage("[message] §4§l此命令不允许控制台启用");
             }
