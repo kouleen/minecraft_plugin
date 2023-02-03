@@ -36,7 +36,7 @@ public interface SupperMessageService {
     /**
      * 获取连接通道
      */
-    Channel getChannel(RabbitMQDTO rabbitMQDTO) throws IOException, TimeoutException;
+    Channel getChannel(RabbitMQDTO rabbitMQDTO,JavaPluginBean javaPluginBean) throws IOException, TimeoutException;
 
     /**
      * 生产消息
@@ -48,7 +48,20 @@ public interface SupperMessageService {
      */
     void consumer(JavaPluginBean javaPluginBean);
 
-    boolean closeChannel();
+    boolean closeChannel(JavaPluginBean javaPluginBean);
+
+    default void printBannerConsole(JavaPluginBean javaPluginBean){
+        SupperMessage supperMessage = javaPluginBean.getSupperMessage();
+        Logger logger = supperMessage.getLogger();
+        logger.info("§c _____ ______   _______   ________   ________  ________  ________  _______      ");
+        logger.info("§c|\\   _ \\  _   \\|\\  ___ \\ |\\   ____\\ |\\   ____\\|\\   __  \\|\\   ____\\|\\  ___ \\     ");
+        logger.info("§c\\ \\  \\\\\\__\\ \\  \\ \\   __/|\\ \\  \\___|_\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\___|\\ \\   __/|    ");
+        logger.info("§c \\ \\  \\\\|__| \\  \\ \\  \\_|/_\\ \\_____  \\\\ \\_____  \\ \\   __  \\ \\  \\  __\\ \\  \\_|/__  ");
+        logger.info("§c  \\ \\  \\    \\ \\  \\ \\  \\_|\\ \\|____|\\  \\\\|____|\\  \\ \\  \\ \\  \\ \\  \\|\\  \\ \\  \\_|\\ \\ ");
+        logger.info("§c   \\ \\__\\    \\ \\__\\ \\_______\\____\\_\\  \\ ____\\_\\  \\ \\__\\ \\__\\ \\_______\\ \\_______\\");
+        logger.info("§c    \\|__|     \\|__|\\|_______|\\_________\\\\_________\\|__|\\|__|\\|_______|\\|_______|");
+        logger.info("§c                            \\|_________\\|_________|                             ");
+    }
 
     default RabbitMQDTO injectionRabbitMQ(FileConfiguration fileConfiguration){
         RabbitMQDTO rabbitMQDTO = new RabbitMQDTO();
@@ -118,7 +131,6 @@ public interface SupperMessageService {
      */
     default boolean registerCommand(JavaPluginBean javaPluginBean){
         SupperMessage supperMessage = javaPluginBean.getSupperMessage();
-        Logger logger = supperMessage.getLogger();
         PluginCommand pluginCommand = supperMessage.getCommand("message");
         if(pluginCommand != null){
             CommandService commandService = javaPluginBean.getCommandService();
@@ -126,14 +138,6 @@ public interface SupperMessageService {
             TabExecutorService tabExecutorService = javaPluginBean.getTabExecutorService();
             pluginCommand.setTabCompleter(tabExecutorService);
         }
-        logger.info("§c _____ ______   _______   ________   ________  ________  ________  _______      ");
-        logger.info("§c|\\   _ \\  _   \\|\\  ___ \\ |\\   ____\\ |\\   ____\\|\\   __  \\|\\   ____\\|\\  ___ \\     ");
-        logger.info("§c\\ \\  \\\\\\__\\ \\  \\ \\   __/|\\ \\  \\___|_\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\___|\\ \\   __/|    ");
-        logger.info("§c \\ \\  \\\\|__| \\  \\ \\  \\_|/_\\ \\_____  \\\\ \\_____  \\ \\   __  \\ \\  \\  __\\ \\  \\_|/__  ");
-        logger.info("§c  \\ \\  \\    \\ \\  \\ \\  \\_|\\ \\|____|\\  \\\\|____|\\  \\ \\  \\ \\  \\ \\  \\|\\  \\ \\  \\_|\\ \\ ");
-        logger.info("§c   \\ \\__\\    \\ \\__\\ \\_______\\____\\_\\  \\ ____\\_\\  \\ \\__\\ \\__\\ \\_______\\ \\_______\\");
-        logger.info("§c    \\|__|     \\|__|\\|_______|\\_________\\\\_________\\|__|\\|__|\\|_______|\\|_______|");
-        logger.info("§c                            \\|_________\\|_________|                             ");
         return true;
     }
 

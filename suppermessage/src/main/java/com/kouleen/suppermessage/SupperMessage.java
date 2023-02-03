@@ -30,6 +30,7 @@ public final class SupperMessage extends JavaPlugin {
     @Override
     public void onEnable() {
         SupperMessageService supperMessageService = javaPluginBean.getSupperMessageService();
+        supperMessageService.printBannerConsole(javaPluginBean);
         supperMessageService.consumer(javaPluginBean);
         supperMessageService.registerCommand(javaPluginBean);
         supperMessageService.registerEvents(javaPluginBean);
@@ -38,7 +39,7 @@ public final class SupperMessage extends JavaPlugin {
     @Override
     public void onDisable() {
         SupperMessageService supperMessageService = javaPluginBean.getSupperMessageService();
-        supperMessageService.closeChannel();
+        supperMessageService.closeChannel(javaPluginBean);
         ThreadPoolExecutor threadPoolExecutor = GlobalSingleton.getThreadPoolExecutor();
         threadPoolExecutor.shutdown();
     }

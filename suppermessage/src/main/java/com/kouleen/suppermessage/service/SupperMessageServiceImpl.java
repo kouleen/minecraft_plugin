@@ -1,5 +1,6 @@
 package com.kouleen.suppermessage.service;
 
+import com.kouleen.suppermessage.SupperMessage;
 import com.kouleen.suppermessage.domain.JavaPluginBean;
 import com.kouleen.suppermessage.domain.RabbitMQDTO;
 import com.kouleen.suppermessage.singleton.GlobalSingleton;
@@ -9,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -23,14 +22,12 @@ import java.util.concurrent.TimeoutException;
  */
 public class SupperMessageServiceImpl implements SupperMessageService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SupperMessageServiceImpl.class);
-
     private static class ChannelHolder{
         static Channel channel;
     }
 
     @Override
-    public Channel getChannel(RabbitMQDTO rabbitMQDTO) throws IOException, TimeoutException {
+    public Channel getChannel(RabbitMQDTO rabbitMQDTO,JavaPluginBean javaPluginBean) throws IOException, TimeoutException {
         if(ChannelHolder.channel != null){
             return ChannelHolder.channel;
         }
@@ -43,6 +40,7 @@ public class SupperMessageServiceImpl implements SupperMessageService {
         factory.setVirtualHost(rabbitMQDTO.getVirtualHost());
         //创建连接
         Connection conn = factory.newConnection();
+        javaPluginBean.getSupperMessage().getLogger().info("The channel is connected");
         return ChannelHolder.channel = conn.createChannel();
     }
 
@@ -51,17 +49,17 @@ public class SupperMessageServiceImpl implements SupperMessageService {
         if (args.length >= 1) {
             StringBuilder builder = new StringBuilder();
             List<String> strList = Arrays.asList(args);
-            strList.forEach(str -> builder.append(str).append(" "));
+            strList.forEach(str -> builder.append(str.replace("&", "§")).append(" "));
             FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
             RabbitMQDTO rabbitMQDTO = this.injectionRabbitMQ(fileConfiguration);
             GlobalSingleton.getThreadPoolExecutor().execute(() ->{
                 String message = "[" + this.getTime() + "] " + "[" + player.getName() + "] " + builder;
                 try {
-                    Channel channel = this.getChannel(rabbitMQDTO);
+                    Channel channel = this.getChannel(rabbitMQDTO,javaPluginBean);
                     channel.queueDeclare(rabbitMQDTO.getQueueName(), false, false, true, null);
                     channel.basicPublish("", rabbitMQDTO.getQueueName(), null, message.getBytes(StandardCharsets.UTF_8));
                 } catch (Exception e) {
-                    commandSender.sendMessage("§4§l网络异常,发送失败");
+                    commandSender.sendMessage("§4§lNetwork abnormal, sending failed");
                 }
             });
         }
@@ -77,7 +75,7 @@ public class SupperMessageServiceImpl implements SupperMessageService {
             Map<UUID, String> players = GlobalSingleton.getPlayers();
             ConsoleCommandSender consoleCommandSender = Bukkit.getConsoleSender();
             try {
-                Channel channel = this.getChannel(rabbitMQDTO);
+                Channel channel = this.getChannel(rabbitMQDTO,javaPluginBean);
                 //声明队列
                 channel.queueDeclare(rabbitMQDTO.getQueueName(), false, false, true, null);
                 channel.basicQos(1);
@@ -112,14 +110,16 @@ public class SupperMessageServiceImpl implements SupperMessageService {
     }
 
     @Override
-    public boolean closeChannel() {
+    public boolean closeChannel(JavaPluginBean javaPluginBean) {
         if(ChannelHolder.channel != null){
             try {
                 ChannelHolder.channel.close();
             } catch (IOException | TimeoutException e) {
                 throw new RuntimeException(e);
             }
-            LOGGER.info("信道关闭成功");
+            SupperMessage supperMessage = javaPluginBean.getSupperMessage();
+            java.util.logging.Logger logger = supperMessage.getLogger();
+            logger.info("The channel was closed successfully");
         }
         return true;
     }
