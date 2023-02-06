@@ -18,3 +18,5 @@ message:
   global:
     error-player: '[message] &4&l你当前的外部信息没开启'
     error-console: '[message] &4&l此命令不允许控制台启用'
+    error-permission: '[message] &4&l你没有操作的权限!'
+  reload: '[message] &4&l配置重载成功'

@@ -1,6 +1,7 @@
 name: SupperMessage
-version: '${project.version}'
+version: '1.0.0'
 main: com.kouleen.suppermessage.SupperMessage
+api-version: 1.13
 authors: [ kouleen ]
 description: supper message
 commands:
@@ -8,3 +9,15 @@ commands:
     description: 'Admin commands'
     usage:  |
       /message help
+permissions:
+  suppermessage.*:
+    default: false
+    children:
+      suppermessage.reload:
+        default: op
+      suppermessage.on:
+        default: true
+      suppermessage.off:
+        default: true
+      suppermessage.send:
+        default: true

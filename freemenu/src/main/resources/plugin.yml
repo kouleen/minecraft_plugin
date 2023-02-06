@@ -1,5 +1,30 @@
 name: FreeMenu
-version: '${project.version}'
+version: '1.0.0'
 main: com.kouleen.freemenu.FreeMenu
 authors: [ kouleen ]
 description: free menu
+api-version: 1.13
+commands:
+  freemenu:
+    aliases:
+      - fm
+permissions:
+  freemenu.*:
+    default: false
+    children:
+      freemenu:admin.*:
+        description: The permissions that the administrator has
+        default: op
+        children:
+          freemenu.open:
+            default: true
+            description: Open menu permissions
+          freemenu.close:
+            description: Close menu permissions
+            default: true
+          freemenu.help:
+            default: true
+            description: Help list tips permissions
+          freemenu.reload:
+            default: op
+            description: Overload configuration permissions

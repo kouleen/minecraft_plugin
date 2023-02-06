@@ -18,3 +18,5 @@ message:
   global:
     error-player: '[message] &4&lYour current external message is not enabled'
     error-console: '[message] &4&lThis command does not allow the console to be enabled'
+    error-permission: '[message] &4&lYou do not have permission to operate!'
+  reload: '[message] &4&lThe configuration overload succeeded'

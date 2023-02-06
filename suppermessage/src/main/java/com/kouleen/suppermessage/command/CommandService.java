@@ -1,9 +1,13 @@
 package com.kouleen.suppermessage.command;
 
+import com.kouleen.suppermessage.domain.JavaPluginBean;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
 
 /**
  * @author zhangqing
@@ -38,5 +42,14 @@ public interface CommandService extends CommandExecutor {
         }else {
             commandSender.sendMessage(defaultMessage);
         }
+    }
+
+    default YamlConfiguration getYamlConfiguration(JavaPluginBean javaPluginBean) {
+        FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
+        String lang = fileConfiguration.getString("global.lang");
+        if (lang.equals("language_ZH.yml")) {
+            return YamlConfiguration.loadConfiguration(new File(javaPluginBean.getSupperMessage().getDataFolder(), "message/language_ZH.yml"));
+        }
+        return YamlConfiguration.loadConfiguration(new File(javaPluginBean.getSupperMessage().getDataFolder(), "message/language_US.yml"));
     }
 }

@@ -1,4 +1,4 @@
-package com.kouleen.suppermessage.constant;
+package com.kouleen.freemenu.constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,20 @@ import java.util.List;
  */
 public enum GlobalPluginEnum {
 
-    OFF("off","关闭"),
-    ON("on","开启"),
+    HELP("help","帮助"),
     RELOAD("reload","重载"),
-    HELP("help","帮助");
+
+
+
+
+
+    ;
 
     private final String code;
 
     private final String desc;
 
-    GlobalPluginEnum(String code,String desc){
+    GlobalPluginEnum(String code, String desc){
         this.code = code;
         this.desc = desc;
     }

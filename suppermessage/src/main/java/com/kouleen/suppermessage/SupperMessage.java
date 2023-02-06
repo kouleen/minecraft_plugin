@@ -20,8 +20,7 @@ public final class SupperMessage extends JavaPlugin {
         javaPluginBean.setSupperMessage(this);
         javaPluginBean.setFileConfiguration(this.getConfig());
         javaPluginBean.setTabExecutorService(new TabExecutorServiceImpl());
-        SupperMessageService supperMessageService = new SupperMessageServiceImpl();
-        javaPluginBean.setSupperMessageService(supperMessageService);
+        javaPluginBean.setSupperMessageService(new SupperMessageServiceImpl());
         javaPluginBean.setCommandService(new CommandServiceImpl(javaPluginBean));
         javaPluginBean.setListenerService(new ListenerServiceImpl());
     }

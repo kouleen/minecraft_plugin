@@ -1,8 +1,5 @@
 ShopName: Menu
-DisplayName: '&4&l&nBoss&1&l&nShop&0 &0&lMenu'
-signs:
-  text: '[Menu]'
-  NeedPermissionToCreateSign: true
+DisplayName: '&4&l&nBoss&1&l&Free&0 &0&lMenu'
 shop:
   glass1:
     MenuItem:

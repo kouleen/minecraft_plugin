@@ -1,5 +1,6 @@
 package com.kouleen.suppermessage.command;
 
+import com.kouleen.suppermessage.SupperMessage;
 import com.kouleen.suppermessage.constant.GlobalPluginEnum;
 import com.kouleen.suppermessage.domain.JavaPluginBean;
 import com.kouleen.suppermessage.service.SupperMessageService;
@@ -30,14 +31,7 @@ public class CommandServiceImpl implements CommandService {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Map<UUID, String> players = GlobalSingleton.getPlayers();
         if (args.length >= 1) {
-            FileConfiguration fileConfiguration = javaPluginBean.getFileConfiguration();
-            String lang = fileConfiguration.getString("global.lang");
-            YamlConfiguration yamlConfiguration = null;
-            if(lang.equals("language_ZH.yml")){
-                yamlConfiguration = YamlConfiguration.loadConfiguration(new File(javaPluginBean.getSupperMessage().getDataFolder(), "message/language_ZH.yml"));
-            }else {
-                yamlConfiguration = YamlConfiguration.loadConfiguration(new File(javaPluginBean.getSupperMessage().getDataFolder(), "message/language_US.yml"));
-            }
+            YamlConfiguration yamlConfiguration = this.getYamlConfiguration(javaPluginBean);
             SupperMessageService supperMessageService = javaPluginBean.getSupperMessageService();
             if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.HELP.getCode())) {
                 sender.sendMessage("§2§l====§8§l【§a§l super-message §8§l】§2§l====");
@@ -45,6 +39,21 @@ public class CommandServiceImpl implements CommandService {
                 this.handleMessage(yamlConfiguration,sender,"message.help.close","§7§l/message <off>  §6no harassment, shut down the outside service message");
                 this.handleMessage(yamlConfiguration,sender,"message.help.open","§7§l/message <on>  §6I want to flirt, open up the message");
                 this.handleMessage(yamlConfiguration,sender,"message.help.msg","§7§l/message <Send a chat message>  §6There are a lot of words");
+                return true;
+            }
+            if(args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.RELOAD.getCode())){
+                if(sender instanceof Player){
+                    Player player = (Player) sender;
+                    if (!player.hasPermission("suppermessage.reload")){
+                        this.handleMessage(yamlConfiguration,sender,"message.global.error-permission","[message] &4&lYou don't have permission to operate!");
+                        return true;
+                    }
+                }
+                SupperMessage supperMessage = javaPluginBean.getSupperMessage();
+                supperMessage.reloadConfig();
+                supperMessage.saveDefaultConfig();
+                javaPluginBean.setFileConfiguration(supperMessage.getConfig());
+                this.handleMessage(this.getYamlConfiguration(javaPluginBean),sender,"message.reload","§4§lThe configuration overload succeeded");
                 return true;
             }
             if(sender instanceof Player){
@@ -73,7 +82,7 @@ public class CommandServiceImpl implements CommandService {
                     return true;
                 }
                 return supperMessageService.producer(javaPluginBean,args, player, sender);
-            }else {
+            } else {
                 this.handleMessage(yamlConfiguration,sender,"message.global.error-console","[message] &4&lThis command does not allow the console to be enabled");
             }
         }

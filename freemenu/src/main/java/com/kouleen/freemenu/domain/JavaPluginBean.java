@@ -17,6 +17,8 @@ public class JavaPluginBean implements Serializable {
 
     private FreeMenu freeMenu;
 
+    private FreeMenuService freeMenuService;
+
     private CommandService commandService;
 
     private ListenerService listenerService;
@@ -24,8 +26,6 @@ public class JavaPluginBean implements Serializable {
     private FileConfiguration fileConfiguration;
 
     private TabExecutorService tabExecutorService;
-
-    private FreeMenuService freeMenuService;
 
     public CommandService getCommandService() {
         return commandService;
