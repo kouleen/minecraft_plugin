@@ -3,6 +3,7 @@ package com.kouleen.suppermessage.command;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author zhangqing
@@ -22,5 +23,20 @@ public interface CommandService extends CommandExecutor {
     @Override
     default boolean onCommand(CommandSender sender, Command command, String label, String[] args){
         return false;
+    }
+
+    /**
+     * @param yamlConfiguration 配置文件
+     * @param commandSender 命令输出器
+     * @param resourcePath example:message.close.success
+     * @param defaultMessage example:[message] §2§lThe Settings are successful. External service messages are closed
+     */
+    default void handleMessage(YamlConfiguration yamlConfiguration,CommandSender commandSender,String resourcePath,String defaultMessage){
+        String msgMessage = yamlConfiguration.getString(resourcePath);
+        if(msgMessage != null && !msgMessage.equals("")){
+            commandSender.sendMessage(msgMessage.replace("&", "§"));
+        }else {
+            commandSender.sendMessage(defaultMessage);
+        }
     }
 }

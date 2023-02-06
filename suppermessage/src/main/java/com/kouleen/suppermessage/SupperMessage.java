@@ -24,12 +24,12 @@ public final class SupperMessage extends JavaPlugin {
         javaPluginBean.setSupperMessageService(supperMessageService);
         javaPluginBean.setCommandService(new CommandServiceImpl(javaPluginBean));
         javaPluginBean.setListenerService(new ListenerServiceImpl());
-        supperMessageService.saveConfigFile(javaPluginBean);
     }
 
     @Override
     public void onEnable() {
         SupperMessageService supperMessageService = javaPluginBean.getSupperMessageService();
+        supperMessageService.saveConfigFile(javaPluginBean);
         supperMessageService.printBannerConsole(javaPluginBean);
         supperMessageService.consumer(javaPluginBean);
         supperMessageService.registerCommand(javaPluginBean);

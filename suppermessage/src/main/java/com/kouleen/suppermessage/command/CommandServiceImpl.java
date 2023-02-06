@@ -42,24 +42,9 @@ public class CommandServiceImpl implements CommandService {
             if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.HELP.getCode())) {
                 sender.sendMessage("§2§l====§8§l【§a§l super-message §8§l】§2§l====");
                 sender.sendMessage("§2§l====§8§l【§a§l QQ群：645375329 §8§l】§2§l====");
-                String offMessage = yamlConfiguration.getString("message.help.off");
-                if(offMessage != null && !offMessage.equals("")){
-                    sender.sendMessage(offMessage.replace("&", "§"));
-                }else {
-                    sender.sendMessage("§7§l/message <off>  §6no harassment, shut down the outside service message");
-                }
-                String onMessage = yamlConfiguration.getString("message.help.on");
-                if(onMessage != null && !onMessage.equals("")){
-                    sender.sendMessage(onMessage.replace("&", "§"));
-                }else {
-                    sender.sendMessage("§7§l/message <on>  §6I want to flirt, open up the message");
-                }
-                String msgMessage = yamlConfiguration.getString("message.help.msg");
-                if(msgMessage != null && !msgMessage.equals("")){
-                    sender.sendMessage(msgMessage.replace("&", "§"));
-                }else {
-                    sender.sendMessage("§7§l/message <Send a chat message>  §6There are a lot of words");
-                }
+                this.handleMessage(yamlConfiguration,sender,"message.help.close","§7§l/message <off>  §6no harassment, shut down the outside service message");
+                this.handleMessage(yamlConfiguration,sender,"message.help.open","§7§l/message <on>  §6I want to flirt, open up the message");
+                this.handleMessage(yamlConfiguration,sender,"message.help.msg","§7§l/message <Send a chat message>  §6There are a lot of words");
                 return true;
             }
             if(sender instanceof Player){
@@ -68,28 +53,28 @@ public class CommandServiceImpl implements CommandService {
                 if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.OFF.getCode())) {
                     if (players != null && !players.containsKey(uniqueId)) {
                         players.put(uniqueId, player.getName());
-                        sender.sendMessage("[message] §2§l设置成功,已关闭外部服务消息");
+                        this.handleMessage(yamlConfiguration,sender,"message.close.success","[message] §2§lThe Settings are successful. External service messages are closed");
                         return true;
                     }
-                    sender.sendMessage("[message] §4§l当前设置已关闭外部服务消息，请勿重复操作");
+                    this.handleMessage(yamlConfiguration,sender,"message.close.repeat","[message] &4&lExternal service messages are disabled. Do not repeat this operation");
                     return true;
                 }
                 if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.ON.getCode())) {
                     if (players != null && players.containsKey(uniqueId)) {
                         players.remove(uniqueId);
-                        sender.sendMessage("[message] §e§l设置成功，已开启外部服务消息");
+                        this.handleMessage(yamlConfiguration,sender,"message.open.success","[message] &e&lThe Settings are successful. External service messages are enabled");
                         return true;
                     }
-                    sender.sendMessage("[message] §4§l当前设置已已开启外部服务消息，请勿重复操作");
+                    this.handleMessage(yamlConfiguration,sender,"message.open.repeat","[message] &4&lExternal service messages have been enabled. Do not repeat this operation");
                     return true;
                 }
                 if (players != null && players.containsKey(uniqueId)) {
-                    sender.sendMessage("[message] §4§l你当前的外部信息没开启");
+                    this.handleMessage(yamlConfiguration,sender,"message.global.error-player","[message] &4&lYour current external message is not enabled");
                     return true;
                 }
                 return supperMessageService.producer(javaPluginBean,args, player, sender);
             }else {
-                sender.sendMessage("[message] §4§l此命令不允许控制台启用");
+                this.handleMessage(yamlConfiguration,sender,"message.global.error-console","[message] &4&lThis command does not allow the console to be enabled");
             }
         }
         return false;

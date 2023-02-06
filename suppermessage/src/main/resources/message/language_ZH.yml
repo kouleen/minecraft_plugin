@@ -6,13 +6,13 @@
 #     *************************************************************************
 message:
   help:
-    off: '&7&l/message <off>  &6拒绝骚扰，关闭外服消息'
-    on: '&7&l/message <on>  &6我想撩骚，开启外服消息'
+    close: '&7&l/message <off>  &6拒绝骚扰，关闭外服消息'
+    open: '&7&l/message <on>  &6我想撩骚，开启外服消息'
     msg: '&7&l/message <发送的聊天消息>  &6骚话一大堆'
-  off:
+  close:
     success: '[message] &2&l设置成功,已关闭外部服务消息'
     repeat: '[message] &4&l当前设置已关闭外部服务消息，请勿重复操作'
-  on:
+  open:
     success: '[message] &e&l设置成功，已开启外部服务消息'
     repeat: '[message] &4&l当前设置已已开启外部服务消息，请勿重复操作'
   global:
