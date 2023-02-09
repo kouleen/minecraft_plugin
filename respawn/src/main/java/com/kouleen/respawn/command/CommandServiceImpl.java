@@ -38,14 +38,11 @@ public class CommandServiceImpl implements CommandService{
                 commandSender.sendMessage("§7[" + "§e" + reSpawn.getName() + "§7]" + "§f: " + "§a§l配置重载成功");
                 return true;
             }
-            if (args.length == 1 && args[0].equalsIgnoreCase(GlobalPluginEnum.HELP.getCmd())){
-                commandSender.sendMessage("§3§l======§eRespawn======");
-                commandSender.sendMessage(" ");
-                commandSender.sendMessage("§7/respawn help : " + "帮助信息");
-                commandSender.sendMessage("§7/respawn reload : " + "配置重载");
-                return true;
-            }
         }
-        return false;
+        commandSender.sendMessage("§3§l======§eRespawn======");
+        commandSender.sendMessage(" ");
+        commandSender.sendMessage("§7/respawn help : " + "帮助信息");
+        commandSender.sendMessage("§7/respawn reload : " + "配置重载");
+        return true;
     }
 }
